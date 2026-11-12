@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAIN | Entrenamiento • Nutrición • Suplementación</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        brand: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        carbon: {
+                            950: '#09090a',
+                            900: '#111113',
+                            850: '#161619',
+                            800: '#1e1e22',
+                            700: '#2c2c32',
+                            600: '#3f3f46',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #09090a;
+            color: #fafafa;
+            -webkit-tap-highlight-color: transparent;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111113;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2c2c32;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #52525b;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased selection:bg-white selection:text-carbon-950">
+
+    <!-- Notificación Toast Flotante -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm"></div>
+
+    <!-- Modal Confirmación -->
+    <div id="custom-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-sm p-4">
+        <div class="bg-carbon-900 border border-carbon-700 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <h3 id="modal-title" class="text-lg font-bold text-white mb-2">Confirmar acción</h3>
+            <p id="modal-message" class="text-zinc-400 text-sm mb-6">¿Estás seguro de que quieres realizar esta acción?</p>
+            <div class="flex justify-end gap-3">
+                <button id="modal-cancel" class="px-4 py-2.5 rounded-xl bg-carbon-800 hover:bg-carbon-700 text-zinc-300 font-medium text-sm transition">Cancelar</button>
+                <button id="modal-confirm" class="px-4 py-2.5 rounded-xl bg-white hover:bg-zinc-200 text-carbon-950 font-bold text-sm transition">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Quién soy (Martín Pérez) - Completamente independiente -->
+    <div id="trainer-bio-modal" onclick="if(event.target === this) toggleTrainerBioModal(false)" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-md p-4">
+        <div class="bg-carbon-900 border border-carbon-700 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl space-y-5 relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-zinc-600 via-white to-zinc-600"></div>
+            <div class="flex items-center justify-between border-b border-carbon-800 pb-3.5">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-7 h-7 rounded-xl bg-white text-carbon-950 font-extrabold flex items-center justify-center text-sm shadow">?</span>
+                    <h3 class="text-sm sm:text-base font-bold text-white tracking-wider uppercase font-brand">¿Quién soy?</h3>
+                </div>
+                <button onclick="toggleTrainerBioModal(false)" class="text-zinc-400 hover:text-white p-1.5 rounded-xl hover:bg-carbon-800 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 text-center pt-1">
+                <div class="relative w-36 h-36 mx-auto rounded-3xl overflow-hidden border-2 border-white/25 shadow-2xl bg-carbon-950">
+                    <img src="data:image/jpeg;base64,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" alt="Martín Pérez" class="w-full h-full object-cover object-top">
+                </div>
+                <div class="space-y-1.5">
+                    <h4 class="text-2xl font-extrabold text-white tracking-tight">Martín Pérez</h4>
+                    <div class="flex items-center justify-center gap-2 flex-wrap">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-carbon-950 text-[11px] font-extrabold uppercase tracking-wider shadow">
+                            Estudiante de CCAFD
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-carbon-800 border border-carbon-700 text-[11px] font-bold text-zinc-200">
+                            Creador de MAIN sport life
+                        </span>
+                    </div>
+                </div>
+                <div class="p-4 rounded-2xl bg-carbon-950 border border-carbon-800 text-left space-y-2">
+                    <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                        <strong class="text-white">Soy Martín Pérez</strong>, estudiante de <strong class="text-white">CCAFD</strong> y creador de <strong class="text-white">MAIN sport life</strong>, dedicado a mejorar la vida y el rendimiento de las personas.
+                    </p>
+                </div>
+            </div>
+
+            <div class="pt-1">
+                <button onclick="toggleTrainerBioModal(false)" class="w-full py-3 rounded-xl bg-white hover:bg-zinc-200 text-carbon-950 font-extrabold text-xs uppercase tracking-wider transition shadow">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Biblioteca de Ejercicios (Con subida local de GIFs/Vídeos) -->
+    <div id="exercise-library-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-sm p-4">
+        <div class="bg-carbon-900 border border-carbon-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
+            <div class="flex items-center justify-between border-b border-carbon-800 pb-3">
+                <h3 class="text-base font-bold text-white uppercase tracking-wider font-brand flex items-center gap-2">
+                    <i data-lucide="dumbbell" class="w-4 h-4"></i> Biblioteca de Ejercicios MAIN
+                </h3>
+                <button onclick="toggleExerciseLibraryModal(false)" class="text-zinc-400 hover:text-white p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleAddNewCustomExercise(event)" class="bg-carbon-950 border border-carbon-800 rounded-xl p-3.5 space-y-3">
+                <div class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                    <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Añadir ejercicio y adjuntar archivo GIF/Vídeo local
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                    <div class="sm:col-span-4">
+                        <select id="new-ex-category" required class="w-full bg-carbon-900 border border-carbon-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                            <option value="">Categoría...</option>
+                        </select>
+                    </div>
+                    <div class="sm:col-span-4">
+                        <input type="text" id="new-ex-name" required placeholder="Nombre ejercicio..." class="w-full bg-carbon-900 border border-carbon-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none">
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label class="block w-full bg-carbon-900 hover:bg-carbon-850 border border-carbon-700 rounded-lg px-3 py-2 text-xs text-zinc-300 text-center cursor-pointer truncate">
+                            <span id="file-label-text">Subir GIF/Vídeo</span>
+                            <input type="file" id="new-ex-file" accept="image/gif,video/mp4,video/webm" onchange="handleFileSelected(event)" class="hidden">
+                        </label>
+                    </div>
+                    <div class="sm:col-span-1">
+                        <button type="submit" class="w-full h-full py-2 bg-white text-carbon-950 hover:bg-zinc-200 text-xs font-bold rounded-lg transition flex items-center justify-center">+</button>
+                    </div>
+                </div>
+            </form>
+
+            <div id="library-categories-container" class="space-y-4 overflow-y-auto pr-1 flex-1"></div>
+            <div class="flex justify-end pt-2 border-t border-carbon-800">
+                <button onclick="toggleExerciseLibraryModal(false)" class="px-4 py-2 rounded-xl bg-carbon-800 text-zinc-300 text-xs font-semibold hover:bg-carbon-700">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Guía -->
+    <div id="guide-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-sm p-4">
+        <div class="bg-carbon-900 border border-carbon-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-carbon-800 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 text-white" id="guide-logo-slot"></div>
+                    <h3 class="text-base font-bold text-white tracking-wide uppercase font-brand">Sistema MAIN — Portal Independiente</h3>
+                </div>
+                <button onclick="toggleGuideModal(false)" class="text-zinc-400 hover:text-white p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="space-y-3 text-sm text-zinc-300 leading-relaxed">
+                <div class="p-3.5 rounded-xl bg-carbon-950 border border-carbon-800 space-y-1">
+                    <div class="font-bold text-white flex items-center gap-2">
+                        <span class="w-5 h-5 rounded-full bg-white text-carbon-950 text-xs flex items-center justify-center font-extrabold">1</span>
+                        Enlace Directo para Clientes
+                    </div>
+                    <p class="text-xs text-zinc-400 pl-7">Al mandar el enlace por WhatsApp, el cliente entra directamente a su portal sin ver la versión de empresa.</p>
+                </div>
+            </div>
+            <div class="pt-2 flex justify-end">
+                <button onclick="toggleGuideModal(false)" class="px-5 py-2.5 rounded-xl bg-white text-carbon-950 font-bold text-xs uppercase tracking-wider hover:bg-zinc-200 transition">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-carbon-950/95 backdrop-blur-md border-b border-carbon-800">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-white text-carbon-950 flex items-center justify-center p-1.5 shadow-md shrink-0">
+                    <svg viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                        <path d="M10 82V12L50 47L90 12V30L50 65L25 43V82H10Z" fill="currentColor"/>
+                        <path d="M90 38V82H75V58L64 58L90 38Z" fill="currentColor"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-brand font-bold text-lg tracking-[0.22em] text-white leading-none">MAIN</span>
+                        <span class="hidden sm:inline-flex items-center gap-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-carbon-850 border border-carbon-700 text-zinc-300">
+                            <span class="w-1.5 h-1.5 rounded-full bg-white"></span> Cloud Activo
+                        </span>
+                    </div>
+                    <p class="text-[9px] font-brand tracking-[0.16em] text-zinc-400 uppercase mt-1 hidden sm:block">Entrenamiento • Nutrición • Suplementación</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <!-- Botón independiente "¿Quién soy?" con interrogante -->
+                <button onclick="toggleTrainerBioModal(true)" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-carbon-900 hover:bg-carbon-800 border border-carbon-700 hover:border-white text-white text-xs font-bold transition shadow" title="¿Quién soy?">
+                    <span class="w-4 h-4 rounded-full bg-white text-carbon-950 text-[11px] font-black flex items-center justify-center">?</span>
+                    <span class="hidden xs:inline sm:inline">Quién soy</span>
+                </button>
+
+                <div id="header-enterprise-controls" class="flex items-center gap-2">
+                    <button onclick="toggleGuideModal(true)" class="p-2 rounded-xl bg-carbon-900 hover:bg-carbon-800 border border-carbon-800 text-zinc-400 hover:text-white transition" title="Guía del sistema">
+                        <i data-lucide="info" class="w-4 h-4"></i>
+                    </button>
+                    <div class="bg-carbon-900 p-1 rounded-xl border border-carbon-800 flex items-center">
+                        <button onclick="switchRole('trainer')" id="btn-role-trainer" class="flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-carbon-950 shadow">
+                            <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
+                            <span>Versión Empresa</span>
+                        </button>
+                        <button onclick="switchRole('client')" id="btn-role-client" class="flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-400 hover:text-white">
+                            <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+                            <span>Versión Cliente</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="header-locked-client-badge" class="hidden items-center gap-2">
+                    <span class="px-3 py-1 rounded-full bg-carbon-900 border border-carbon-700 text-[11px] font-semibold text-zinc-300 flex items-center gap-1.5">
+                        <i data-lucide="lock" class="w-3 h-3 text-white"></i> Portal del Deportista
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-6">
+
+        <!-- ===================================================================== -->
+        <!-- VERSIÓN EMPRESA (ENTRENADOR)                                          -->
+        <!-- ===================================================================== -->
+        <div id="view-trainer" class="space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Columna Izquierda: Clientes -->
+                <div class="lg:col-span-4 space-y-4">
+                    <div class="bg-carbon-900 border border-carbon-800 rounded-2xl p-4 sm:p-5">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <span class="text-[10px] font-brand uppercase tracking-[0.18em] text-zinc-500 block">Panel Empresa</span>
+                                <h2 class="text-base font-bold text-white flex items-center gap-2 mt-0.5">Mis Clientes</h2>
+                            </div>
+                            <button onclick="toggleNewClientForm()" class="px-3 py-1.5 rounded-xl bg-white text-carbon-950 hover:bg-zinc-200 transition font-bold text-xs flex items-center gap-1">
+                                <i data-lucide="plus" class="w-3.5 h-3.5"></i> Nuevo
+                            </button>
+                        </div>
+
+                        <form id="new-client-form" onsubmit="handleCreateClient(event)" class="hidden mb-4 p-3.5 bg-carbon-950 border border-carbon-700 rounded-xl space-y-3">
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Nombre y apellidos *</label>
+                                <input type="text" id="client-name-input" required placeholder="Ej. Laura Gómez" class="w-full bg-carbon-900 border border-carbon-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-zinc-400 mb-1">Objetivo / Plan</label>
+                                <input type="text" id="client-goal-input" placeholder="Ej. Hipertrofia + Nutrición" class="w-full bg-carbon-900 border border-carbon-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-white">
+                            </div>
+                            <div class="flex gap-2 pt-1">
+                                <button type="button" onclick="toggleNewClientForm()" class="flex-1 py-2 rounded-lg bg-carbon-800 text-zinc-300 text-xs font-medium hover:bg-carbon-700">Cancelar</button>
+                                <button type="submit" class="flex-1 py-2 rounded-lg bg-white text-carbon-950 text-xs font-bold hover:bg-zinc-200">Crear Ficha</button>
+                            </div>
+                        </form>
+
+                        <div id="trainer-client-list" class="space-y-2"></div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Ficha del Cliente -->
+                <div id="trainer-client-detail" class="lg:col-span-8 space-y-6">
+                    <div id="trainer-no-client" class="hidden bg-carbon-900 border border-carbon-800 rounded-2xl p-12 text-center">
+                        <i data-lucide="users" class="w-10 h-10 text-zinc-600 mx-auto mb-3"></i>
+                        <h3 class="text-base font-bold text-white">Selecciona o crea un cliente</h3>
+                        <p class="text-xs text-zinc-400 mt-1">Planifica su mes y año completo y revisa sus entrenamientos en la nube.</p>
+                    </div>
+
+                    <div id="trainer-active-client-panel" class="space-y-5">
+                        <div class="bg-carbon-900 border border-carbon-800 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <div class="flex items-center gap-2.5 flex-wrap">
+                                    <h1 id="active-client-name" class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">Nombre Cliente</h1>
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-white/10 text-white border border-white/20">Cloud Activo</span>
+                                </div>
+                                <p id="active-client-goal" class="text-xs text-zinc-400 mt-1 flex items-center gap-1.5">
+                                    <i data-lucide="target" class="w-3.5 h-3.5 text-zinc-400"></i>
+                                    <span>Objetivo</span>
+                                </p>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button onclick="copyClientDirectLink()" class="px-3.5 py-2 rounded-xl bg-white hover:bg-zinc-200 text-carbon-950 font-bold text-xs flex items-center gap-1.5 transition shadow">
+                                    <i data-lucide="share-2" class="w-3.5 h-3.5"></i> Enlace WhatsApp
+                                </button>
+                                <button onclick="previewAsThisClient()" class="px-3 py-2 rounded-xl bg-carbon-800 hover:bg-carbon-700 text-zinc-200 font-semibold text-xs flex items-center gap-1.5 transition" title="Ver como el cliente">
+                                    <i data-lucide="eye" class="w-3.5 h-3.5"></i> Ver como él
+                                </button>
+                                <button onclick="deleteCurrentClient()" class="p-2 rounded-xl bg-carbon-800 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 transition" title="Eliminar cliente">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sub-pestañas Empresa -->
+                        <div class="flex border-b border-carbon-800 gap-6">
+                            <button onclick="switchTrainerTab('routines')" id="tab-trainer-routines" class="pb-3 text-xs sm:text-sm font-bold border-b-2 border-white text-white flex items-center gap-2 transition">
+                                <i data-lucide="calendar" class="w-4 h-4"></i>
+                                Planificación Mensual y Anual
+                            </button>
+                            <button onclick="switchTrainerTab('logs')" id="tab-trainer-logs" class="pb-3 text-xs sm:text-sm font-bold border-b-2 border-transparent text-zinc-400 hover:text-white flex items-center gap-2 transition">
+                                <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                                Registro y Pesos
+                                <span id="logs-count-badge" class="px-2 py-0.5 text-[11px] rounded-full bg-carbon-800 text-zinc-300">0</span>
+                            </button>
+                        </div>
+
+                        <!-- TAB 1: PLANIFICACIÓN MENSUAL / ANUAL -->
+                        <div id="trainer-tab-routines-content" class="space-y-4">
+                            <div class="bg-carbon-900 border border-carbon-800 rounded-2xl p-4 space-y-4">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-carbon-800 pb-3">
+                                    <div class="flex items-center gap-3">
+                                        <button onclick="changeTrainerMonth(-1)" class="p-2 rounded-xl bg-carbon-800 hover:bg-carbon-700 text-zinc-300 transition"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                                        <h3 id="trainer-calendar-title" class="text-base font-extrabold text-white uppercase tracking-wider">Mes Año</h3>
+                                        <button onclick="changeTrainerMonth(1)" class="p-2 rounded-xl bg-carbon-800 hover:bg-carbon-700 text-zinc-300 transition"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                                    </div>
+                                    <div class="text-xs text-zinc-400">Selecciona cualquier día del mes para programar</div>
+                                </div>
+                                <div id="trainer-calendar-grid" class="grid grid-cols-7 gap-2"></div>
+                            </div>
+                            <div id="trainer-selected-day-editor"></div>
+                        </div>
+
+                        <!-- TAB 2: REGISTROS -->
+                        <div id="trainer-tab-logs-content" class="hidden space-y-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-carbon-900 border border-carbon-800 rounded-xl p-3.5">
+                                <h3 class="text-sm font-bold text-zinc-200">Historial Sincronizado</h3>
+                                <div class="flex items-center gap-1 bg-carbon-950 p-1 rounded-lg border border-carbon-800">
+                                    <button onclick="setTrainerLogsFilter('week')" id="filter-trainer-week" class="px-3 py-1 rounded-md text-xs font-bold transition bg-white text-carbon-950">Semana</button>
+                                    <button onclick="setTrainerLogsFilter('month')" id="filter-trainer-month" class="px-3 py-1 rounded-md text-xs font-bold transition text-zinc-400 hover:text-white">Mes</button>
+                                    <button onclick="setTrainerLogsFilter('year')" id="filter-trainer-year" class="px-3 py-1 rounded-md text-xs font-bold transition text-zinc-400 hover:text-white">Año</button>
+                                </div>
+                            </div>
+                            <div id="trainer-logs-list" class="space-y-4"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================================================================== -->
+        <!-- VERSIÓN CLIENTE (MÓVIL / GIMNASIO)                                    -->
+        <!-- ===================================================================== -->
+        <div id="view-client" class="hidden max-w-2xl mx-auto space-y-5">
+            
+            <div id="client-preview-banner" class="bg-carbon-900 border border-carbon-700 rounded-2xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="px-2 py-0.5 rounded bg-white text-carbon-950 text-[10px] font-extrabold uppercase">Vista Previa</span>
+                    <select id="client-profile-selector" onchange="handleClientProfileChange(this.value)" class="bg-carbon-950 border border-carbon-700 text-white font-bold text-xs rounded-lg px-2.5 py-1.5 focus:outline-none">
+                    </select>
+                </div>
+                <button onclick="copyClientDirectLink(state.selectedClientProfileId)" class="text-xs font-bold text-white hover:underline flex items-center gap-1.5">
+                    <i data-lucide="share-2" class="w-3.5 h-3.5"></i> Copiar enlace privado
+                </button>
+            </div>
+
+            <div class="bg-carbon-900 border border-carbon-800 rounded-2xl p-5 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 rounded-2xl bg-white text-carbon-950 flex items-center justify-center font-brand font-extrabold text-xl shrink-0" id="client-avatar-initial">
+                        M
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-brand uppercase tracking-[0.2em] text-zinc-400 block">Planificación Mensual y Anual MAIN</span>
+                        <h1 id="client-welcome-name" class="text-lg sm:text-xl font-extrabold text-white mt-0.5">Deportista</h1>
+                        <p id="client-view-goal" class="text-xs text-zinc-400 mt-0.5">Objetivo</p>
+                    </div>
+                </div>
+                <div class="text-right hidden sm:block">
+                    <span class="text-[10px] uppercase tracking-wider text-zinc-500 block">Cloud</span>
+                    <span class="text-xs font-bold text-white">Sincronizado</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 bg-carbon-900 p-1 rounded-xl border border-carbon-800">
+                <button onclick="switchClientTab('workout')" id="tab-client-workout" class="py-2.5 rounded-lg text-xs sm:text-sm font-bold bg-white text-carbon-950 shadow transition flex items-center justify-center gap-2">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    Mi Calendario
+                </button>
+                <button onclick="switchClientTab('history')" id="tab-client-history" class="py-2.5 rounded-lg text-xs sm:text-sm font-bold text-zinc-400 hover:text-white transition flex items-center justify-center gap-2">
+                    <i data-lucide="history" class="w-4 h-4"></i>
+                    Mis Registros
+                </button>
+            </div>
+
+            <!-- TAB CLIENTE 1 -->
+            <div id="client-tab-workout-content" class="space-y-4">
+                <div class="bg-carbon-900 border border-carbon-800 rounded-2xl p-4 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-carbon-800 pb-3">
+                        <div class="flex items-center gap-3">
+                            <button onclick="changeClientMonth(-1)" class="p-2 rounded-xl bg-carbon-800 hover:bg-carbon-700 text-zinc-300 transition"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                            <h3 id="client-calendar-title" class="text-base font-extrabold text-white uppercase tracking-wider">Mes Año</h3>
+                            <button onclick="changeClientMonth(1)" class="p-2 rounded-xl bg-carbon-800 hover:bg-carbon-700 text-zinc-300 transition"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                        </div>
+                        <span id="client-today-badge" class="text-xs font-bold text-white bg-carbon-800 px-3 py-1 rounded-lg">Hoy</span>
+                    </div>
+                    <div id="client-calendar-grid" class="grid grid-cols-7 gap-2"></div>
+                </div>
+                <div id="client-day-workout-container" class="space-y-4"></div>
+            </div>
+
+            <!-- TAB CLIENTE 2: HISTORIAL -->
+            <div id="client-tab-history-content" class="hidden space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-carbon-900 border border-carbon-800 rounded-xl p-3.5">
+                    <h3 class="text-sm font-bold text-zinc-200">Tu Historial de Entrenamientos</h3>
+                    <div class="flex items-center gap-1 bg-carbon-950 p-1 rounded-lg border border-carbon-800">
+                        <button onclick="setClientLogsFilter('week')" id="filter-client-week" class="px-3 py-1 rounded-md text-xs font-bold transition bg-white text-carbon-950">Semana</button>
+                        <button onclick="setClientLogsFilter('month')" id="filter-client-month" class="px-3 py-1 rounded-md text-xs font-bold transition text-zinc-400 hover:text-white">Mes</button>
+                        <button onclick="setClientLogsFilter('year')" id="filter-client-year" class="px-3 py-1 rounded-md text-xs font-bold transition text-zinc-400 hover:text-white">Año</button>
+                    </div>
+                </div>
+                <div id="client-history-container" class="space-y-4"></div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer class="border-t border-carbon-900 py-5 mt-10">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-zinc-500 text-[11px]">
+            <div class="flex items-center gap-2">
+                <span class="font-brand font-bold tracking-[0.2em] text-zinc-300">MAIN</span>
+                <span>•</span>
+                <span>Entrenamiento • Nutrición • Suplementación</span>
+            </div>
+            <div>Sincronización Cloud Automática</div>
+        </div>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'main_platform_v6_data';
+
+        const EXACT_CATEGORIES = [
+            "cuádriceps",
+            "femoral isquios",
+            "gemelos",
+            "glúteo",
+            "abdominales",
+            "hombros",
+            "tríceps",
+            "bíceps",
+            "pecho",
+            "espalda superior",
+            "dorsales"
+        ];
+
+        const DEFAULT_EXERCISE_LIBRARY = {
+            "cuádriceps": [
+                { name: "Sentadilla Libre con Barra", gif: "" },
+                { name: "Prensa Inclinada 45°", gif: "" },
+                { name: "Extensión de Cuádriceps", gif: "" }
+            ],
+            "femoral isquios": [
+                { name: "Peso Muerto Rumano", gif: "" },
+                { name: "Curl Femoral Tumbado", gif: "" }
+            ],
+            "gemelos": [
+                { name: "Elevación de Talones de Pie", gif: "" }
+            ],
+            "glúteo": [
+                { name: "Hip Thrust con Barra", gif: "" },
+                { name: "Patada de Glúteo en Polea", gif: "" }
+            ],
+            "abdominales": [
+                { name: "Plancha Abdominal", gif: "" },
+                { name: "Elevación de Piernas Colgado", gif: "" }
+            ],
+            "hombros": [
+                { name: "Press Militar con Mancuernas", gif: "" },
+                { name: "Elevaciones Laterales", gif: "" }
+            ],
+            "tríceps": [
+                { name: "Tríceps Polea Alta con Cuerda", gif: "" }
+            ],
+            "bíceps": [
+                { name: "Curl Bíceps Barra Z", gif: "" }
+            ],
+            "pecho": [
+                { name: "Press de Banca con Barra", gif: "" },
+                { name: "Press Inclinado con Mancuernas", gif: "" }
+            ],
+            "espalda superior": [
+                { name: "Remo con Barra", gif: "" },
+                { name: "Remo en Polea Baja", gif: "" }
+            ],
+            "dorsales": [
+                { name: "Jalón al Pecho Agarre Neutro", gif: "" },
+                { name: "Dominadas", gif: "" }
+            ]
+        };
+
+        function formatDateKey(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        const todayDateObj = new Date();
+        const todayDateKey = formatDateKey(todayDateObj);
+
+        function getDefaultSeedData() {
+            return {
+                clients: [
+                    {
+                        id: "c_carlos_main",
+                        name: "Carlos Martínez",
+                        goal: "Hipertrofia y Fuerza",
+                        createdAt: Date.now() - 86400000 * 5
+                    }
+                ],
+                routines: [
+                    {
+                        id: 'r_seed_1',
+                        clientId: 'c_carlos_main',
+                        dateKey: todayDateKey,
+                        title: 'Torso A — Empuje y Tracción',
+                        description: 'Descanso 2 min en básicos.',
+                        exercises: [
+                            { id: "ex_m1", name: "Press de Banca con Barra", sets: 4, targetReps: "6-8", suggestedWeight: "75", notes: "Escápulas retraídas.", gif: "" },
+                            { id: "ex_m2", name: "Jalón al Pecho Agarre Neutro", sets: 4, targetReps: "8-10", suggestedWeight: "65", notes: "Codos hacia la cadera.", gif: "" }
+                        ]
+                    }
+                ],
+                logs: [],
+                exerciseLibrary: DEFAULT_EXERCISE_LIBRARY
+            };
+        }
+
+        function encodePayloadToBase64(obj) {
+            const jsonStr = JSON.stringify(obj);
+            const bytes = new TextEncoder().encode(jsonStr);
+            let binStr = '';
+            for (let i = 0; i < bytes.length; i++) {
+                binStr += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binStr).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        }
+
+        function decodePayloadFromBase64(b64) {
+            try {
+                let norm = b64.replace(/-/g, '+').replace(/_/g, '/');
+                while (norm.length % 4) norm += '=';
+                const binStr = atob(norm);
+                const bytes = new Uint8Array(binStr.length);
+                for (let i = 0; i < binStr.length; i++) {
+                    bytes[i] = binStr.charCodeAt(i);
+                }
+                const jsonStr = new TextDecoder().decode(bytes);
+                return JSON.parse(jsonStr);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function loadStore() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && Array.isArray(parsed.clients)) {
+                        if (!parsed.exerciseLibrary) {
+                            parsed.exerciseLibrary = DEFAULT_EXERCISE_LIBRARY;
+                        } else {
+                            EXACT_CATEGORIES.forEach(cat => {
+                                if (!parsed.exerciseLibrary[cat]) parsed.exerciseLibrary[cat] = [];
+                            });
+                        }
+                        return parsed;
+                    }
+                }
+            } catch (e) {}
+            const seed = getDefaultSeedData();
+            saveStore(seed);
+            return seed;
+        }
+
+        function saveStore(dataObj) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                    clients: dataObj.clients,
+                    routines: dataObj.routines,
+                    logs: dataObj.logs,
+                    exerciseLibrary: dataObj.exerciseLibrary
+                }));
+            } catch (e) {}
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const lockedClientIdFromUrl = urlParams.get('cliente');
+        const encodedPlanFromUrl = urlParams.get('plan');
+
+        const store = loadStore();
+
+        if (lockedClientIdFromUrl && encodedPlanFromUrl) {
+            const importedBundle = decodePayloadFromBase64(encodedPlanFromUrl);
+            if (importedBundle && importedBundle.c) {
+                const incomingClient = importedBundle.c;
+                const incomingRoutines = Array.isArray(importedBundle.r) ? importedBundle.r : [];
+
+                const existingIdx = store.clients.findIndex(c => c.id === incomingClient.id);
+                if (existingIdx >= 0) {
+                    store.clients[existingIdx] = { ...store.clients[existingIdx], ...incomingClient };
+                } else {
+                    store.clients.push(incomingClient);
+                }
+
+                store.routines = store.routines.filter(r => r.clientId !== incomingClient.id).concat(incomingRoutines);
+                saveStore(store);
+            }
+        }
+
+        let state = {
+            isLockedClientMode: Boolean(lockedClientIdFromUrl),
+            role: lockedClientIdFromUrl ? 'client' : 'trainer',
+            trainerTab: 'routines',
+            clientTab: 'workout',
+            clients: store.clients,
+            routines: store.routines,
+            logs: store.logs,
+            exerciseLibrary: store.exerciseLibrary || DEFAULT_EXERCISE_LIBRARY,
+            selectedTrainerClientId: store.clients[0]?.id || null,
+            selectedClientProfileId: lockedClientIdFromUrl || store.clients[0]?.id || null,
+            
+            trainerYear: todayDateObj.getFullYear(),
+            trainerMonth: todayDateObj.getMonth(),
+            selectedTrainerDateKey: todayDateKey,
+
+            clientYear: todayDateObj.getFullYear(),
+            clientMonth: todayDateObj.getMonth(),
+            selectedClientDateKey: todayDateKey,
+
+            activeWorkoutRoutineId: null,
+            workoutDraft: {},
+            activeRoutineIdForLibrary: null,
+            trainerLogsFilter: 'week',
+            clientLogsFilter: 'week',
+            pendingGifData: ''
+        };
+
+        if (state.isLockedClientMode) {
+            document.getElementById('header-enterprise-controls').classList.add('hidden');
+            const badge = document.getElementById('header-locked-client-badge');
+            badge.classList.remove('hidden');
+            badge.classList.add('flex');
+        }
+
+        function persistState() {
+            saveStore(state);
+        }
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === STORAGE_KEY && e.newValue) {
+                try {
+                    const parsed = JSON.parse(e.newValue);
+                    state.clients = parsed.clients || [];
+                    state.routines = parsed.routines || [];
+                    state.logs = parsed.logs || [];
+                    state.exerciseLibrary = parsed.exerciseLibrary || DEFAULT_EXERCISE_LIBRARY;
+                    renderApp();
+                } catch (err) {}
+            }
+        });
+
+        // =========================================================================
+        // MODAL ¿QUIÉN SOY?
+        // =========================================================================
+        window.toggleTrainerBioModal = (show) => {
+            const modal = document.getElementById('trainer-bio-modal');
+            if (show) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            if (window.lucide) window.lucide.createIcons();
+        };
+
+        // =========================================================================
+        // BIBLIOTECA EDITABLE Y SUBIDA LOCAL DE GIFS
+        // =========================================================================
+
+        window.toggleGuideModal = (show) => {
+            const modal = document.getElementById('guide-modal');
+            const logoSlot = document.getElementById('guide-logo-slot');
+            if (logoSlot && !logoSlot.innerHTML) {
+                logoSlot.innerHTML = `<svg viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full"><path d="M10 82V12L50 47L90 12V30L50 65L25 43V82H10Z" fill="currentColor"/><path d="M90 38V82H75V58L64 58L90 38Z" fill="currentColor"/></svg>`;
+            }
+            if (show) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        };
+
+        window.toggleExerciseLibraryModal = (show, routineId = null) => {
+            const modal = document.getElementById('exercise-library-modal');
+            if (show) {
+                state.activeRoutineIdForLibrary = routineId;
+                state.pendingGifData = '';
+                document.getElementById('file-label-text').textContent = "Subir GIF/Vídeo";
+                renderExerciseLibraryContent();
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            } else {
+                state.activeRoutineIdForLibrary = null;
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        };
+
+        window.handleFileSelected = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                state.pendingGifData = e.target.result;
+                document.getElementById('file-label-text').textContent = "✓ Archivo adjunto";
+                showToast("GIF/Vídeo cargado correctamente.");
+            };
+            reader.readAsDataURL(file);
+        };
+
+        function renderExerciseLibraryContent() {
+            const selectCat = document.getElementById('new-ex-category');
+            selectCat.innerHTML = `<option value="">Categoría...</option>` + 
+                EXACT_CATEGORIES.map(cat => `<option value="${cat}">${cat.toUpperCase()}</option>`).join('');
+
+            const container = document.getElementById('library-categories-container');
+            container.innerHTML = EXACT_CATEGORIES.map(category => {
+                const exercises = state.exerciseLibrary[category] || [];
+                return `
+                    <div class="bg-carbon-950 border border-carbon-800 rounded-xl p-3.5 space-y-2">
+                        <h4 class="text-xs font-brand font-bold text-white uppercase tracking-wider flex items-center justify-between">
+                            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-white"></span> ${category}</span>
+                            <span class="text-[10px] text-zinc-500">${exercises.length} ejerc.</span>
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            ${exercises.map(exObj => {
+                                const name = typeof exObj === 'string' ? exObj : exObj.name;
+                                const gif = typeof exObj === 'object' && exObj.gif ? exObj.gif : '';
+                                return `
+                                    <div class="text-left px-3 py-2 rounded-lg bg-carbon-900 border border-carbon-800 text-xs text-zinc-200 font-medium flex items-center justify-between group">
+                                        <div class="truncate pr-2">
+                                            <div class="font-bold text-white truncate">${escapeHtml(name)}</div>
+                                            ${gif ? `<span class="text-[10px] text-green-400">✓ Con GIF local</span>` : ''}
+                                        </div>
+                                        <div class="flex items-center gap-1 shrink-0">
+                                            ${state.activeRoutineIdForLibrary ? `
+                                                <button onclick="addExerciseFromLibrary('${escapeHtml(name)}', '${escapeHtml(gif)}')" class="px-2 py-1 bg-white text-carbon-950 font-bold rounded text-[10px] hover:bg-zinc-200">Añadir</button>
+                                            ` : ''}
+                                            <button onclick="deleteExerciseFromLibrary('${category}', '${escapeHtml(name)}')" class="text-zinc-500 hover:text-red-400 p-1" title="Eliminar">
+                                                <i data-lucide="trash" class="w-3 h-3"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        window.handleAddNewCustomExercise = (e) => {
+            e.preventDefault();
+            const category = document.getElementById('new-ex-category').value;
+            const name = document.getElementById('new-ex-name').value.trim();
+            const gif = state.pendingGifData || '';
+            if (!category || !name) return;
+
+            if (!state.exerciseLibrary[category]) {
+                state.exerciseLibrary[category] = [];
+            }
+            
+            const exists = state.exerciseLibrary[category].some(e => (typeof e === 'string' ? e === name : e.name === name));
+            if (!exists) {
+                state.exerciseLibrary[category].push({ name, gif });
+                persistState();
+                document.getElementById('new-ex-name').value = '';
+                state.pendingGifData = '';
+                document.getElementById('file-label-text').textContent = "Subir GIF/Vídeo";
+                renderExerciseLibraryContent();
+                showToast(`Ejercicio "${name}" añadido a la biblioteca.`);
+            } else {
+                showToast("Este ejercicio ya existe en esta categoría.", "error");
+            }
+        };
+
+        window.deleteExerciseFromLibrary = (category, exerciseName) => {
+            if (state.exerciseLibrary[category]) {
+                state.exerciseLibrary[category] = state.exerciseLibrary[category].filter(e => {
+                    const n = typeof e === 'string' ? e : e.name;
+                    return n !== exerciseName;
+                });
+                persistState();
+                renderExerciseLibraryContent();
+                showToast("Ejercicio eliminado.");
+            }
+        };
+
+        window.addExerciseFromLibrary = (exerciseName, exerciseGif) => {
+            const routineId = state.activeRoutineIdForLibrary;
+            if (!routineId) return;
+
+            const routine = state.routines.find(r => r.id === routineId);
+            if (!routine) return;
+
+            const newExercise = {
+                id: 'ex_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                name: exerciseName,
+                sets: 3,
+                targetReps: "10-12",
+                suggestedWeight: "",
+                notes: "Controla la fase excéntrica.",
+                gif: exerciseGif || ""
+            };
+
+            routine.exercises = [...(routine.exercises || []), newExercise];
+            persistState();
+            toggleExerciseLibraryModal(false);
+            renderApp();
+            showToast(`Ejercicio "${exerciseName}" añadido.`);
+        };
+
+        window.switchRole = (role) => {
+            if (state.isLockedClientMode) return;
+            state.role = role;
+            const btnTrainer = document.getElementById('btn-role-trainer');
+            const btnClient = document.getElementById('btn-role-client');
+
+            if (role === 'trainer') {
+                btnTrainer.className = "flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-carbon-950 shadow";
+                btnClient.className = "flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-400 hover:text-white";
+            } else {
+                btnClient.className = "flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-carbon-950 shadow";
+                btnTrainer.className = "flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-400 hover:text-white";
+            }
+            renderApp();
+        };
+
+        window.copyClientDirectLink = (specificClientId) => {
+            const clientId = specificClientId || state.selectedTrainerClientId;
+            if (!clientId) return;
+            const client = state.clients.find(c => c.id === clientId);
+            if (!client) return;
+
+            const clientRoutines = state.routines.filter(r => r.clientId === client.id);
+            const payload = {
+                c: { id: client.id, name: client.name, goal: client.goal },
+                r: clientRoutines
+            };
+            const encodedPlan = encodePayloadToBase64(payload);
+
+            const baseUrl = window.location.href.split('?')[0];
+            const directUrl = `${baseUrl}?cliente=${encodeURIComponent(clientId)}&plan=${encodedPlan}`;
+
+            const waText = `Hola ${client.name}! Aquí tienes tu acceso directo al portal de entrenamiento MAIN: ${directUrl}`;
+            copyTextToClipboard(waText);
+            
+            window.open(`https://wa.me/?text=${encodeURIComponent(waText)}`, '_blank');
+            showToast("¡Enlace directo para WhatsApp copiado y abierto!");
+        };
+
+        window.previewAsThisClient = () => {
+            if (!state.selectedTrainerClientId) return;
+            state.selectedClientProfileId = state.selectedTrainerClientId;
+            state.activeWorkoutRoutineId = null;
+            switchRole('client');
+        };
+
+        window.changeTrainerMonth = (delta) => {
+            state.trainerMonth += delta;
+            if (state.trainerMonth > 11) { state.trainerMonth = 0; state.trainerYear++; }
+            else if (state.trainerMonth < 0) { state.trainerMonth = 11; state.trainerYear--; }
+            renderApp();
+        };
+
+        window.changeClientMonth = (delta) => {
+            state.clientMonth += delta;
+            if (state.clientMonth > 11) { state.clientMonth = 0; state.clientYear++; }
+            else if (state.clientMonth < 0) { state.clientMonth = 11; state.clientYear--; }
+            renderApp();
+        };
+
+        window.selectTrainerDate = (dateKey) => { state.selectedTrainerDateKey = dateKey; renderApp(); };
+        window.selectClientDate = (dateKey) => { state.selectedClientDateKey = dateKey; state.activeWorkoutRoutineId = null; renderApp(); };
+
+        window.toggleNewClientForm = () => {
+            const form = document.getElementById('new-client-form');
+            form.classList.toggle('hidden');
+        };
+
+        window.handleCreateClient = (e) => {
+            e.preventDefault();
+            const nameInput = document.getElementById('client-name-input');
+            const goalInput = document.getElementById('client-goal-input');
+            const name = nameInput.value.trim();
+            const goal = goalInput.value.trim() || "Entrenamiento Personalizado MAIN";
+
+            if (!name) return;
+
+            const newClient = {
+                id: 'c_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                name, goal, createdAt: Date.now()
+            };
+
+            state.clients.push(newClient);
+            state.selectedTrainerClientId = newClient.id;
+            persistState();
+            nameInput.value = ''; goalInput.value = '';
+            toggleNewClientForm();
+            renderApp();
+            showToast(`Cliente "${name}" dado de alta.`);
+        };
+
+        window.selectTrainerClient = (clientId) => { state.selectedTrainerClientId = clientId; renderApp(); };
+
+        window.deleteCurrentClient = () => {
+            const client = state.clients.find(c => c.id === state.selectedTrainerClientId);
+            if (!client) return;
+            openConfirmModal("Eliminar cliente", `¿Seguro que quieres eliminar a ${client.name}?`, () => {
+                state.clients = state.clients.filter(c => c.id !== client.id);
+                state.routines = state.routines.filter(r => r.clientId !== client.id);
+                state.selectedTrainerClientId = state.clients[0]?.id || null;
+                persistState();
+                renderApp();
+                showToast("Cliente eliminado.");
+            });
+        };
+
+        window.switchTrainerTab = (tab) => { state.trainerTab = tab; renderApp(); };
+
+        window.handleSaveDateRoutine = (e, dateKey) => {
+            e.preventDefault();
+            if (!state.selectedTrainerClientId) return;
+            const title = document.getElementById('date-routine-title').value.trim();
+            const description = document.getElementById('date-routine-desc').value.trim();
+            if (!title) return;
+
+            const existingIdx = state.routines.findIndex(r => r.clientId === state.selectedTrainerClientId && r.dateKey === dateKey);
+            if (existingIdx >= 0) {
+                state.routines[existingIdx].title = title;
+                state.routines[existingIdx].description = description;
+            } else {
+                state.routines.push({
+                    id: 'r_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                    clientId: state.selectedTrainerClientId,
+                    dateKey, title, description, exercises: []
+                });
+            }
+            persistState();
+            renderApp();
+            showToast("Rutina guardada en el calendario.");
+        };
+
+        window.clearDateRoutine = (routineId) => {
+            openConfirmModal("Eliminar sesión", "¿Marcar como descanso?", () => {
+                state.routines = state.routines.filter(r => r.id !== routineId);
+                persistState(); renderApp(); showToast("Día marcado como descanso.");
+            });
+        };
+
+        window.removeExerciseFromRoutine = (routineId, exerciseId) => {
+            const routine = state.routines.find(r => r.id === routineId);
+            if (!routine) return;
+            routine.exercises = (routine.exercises || []).filter(ex => ex.id !== exerciseId);
+            persistState(); renderApp(); showToast("Ejercicio eliminado.");
+        };
+
+        window.setTrainerLogsFilter = (f) => { state.trainerLogsFilter = f; renderApp(); };
+        window.setClientLogsFilter = (f) => { state.clientLogsFilter = f; renderApp(); };
+
+        window.handleClientProfileChange = (clientId) => {
+            if (state.isLockedClientMode) return;
+            state.selectedClientProfileId = clientId;
+            state.activeWorkoutRoutineId = null;
+            state.workoutDraft = {};
+            renderApp();
+        };
+
+        window.switchClientTab = (tab) => { state.clientTab = tab; renderApp(); };
+
+        window.startWorkoutSession = (routineId) => {
+            const routine = state.routines.find(r => r.id === routineId);
+            if (!routine) return;
+            state.activeWorkoutRoutineId = routineId;
+            state.workoutDraft = {};
+            (routine.exercises || []).forEach(ex => {
+                const setsArray = [];
+                for (let i = 0; i < (ex.sets || 3); i++) {
+                    setsArray.push({ weight: ex.suggestedWeight || '', reps: '', done: false });
+                }
+                state.workoutDraft[ex.id] = setsArray;
+            });
+            renderApp();
+        };
+
+        window.cancelWorkoutSession = () => {
+            openConfirmModal("Salir", "¿Salir sin guardar?", () => {
+                state.activeWorkoutRoutineId = null; state.workoutDraft = {}; renderApp();
+            });
+        };
+
+        window.updateSetDraft = (exerciseId, setIndex, field, value) => {
+            if (!state.workoutDraft[exerciseId]) return;
+            state.workoutDraft[exerciseId][setIndex][field] = value;
+            if (field === 'done') { renderClientView(); if (window.lucide) window.lucide.createIcons(); }
+        };
+
+        window.addExtraSetToExercise = (exerciseId) => {
+            if (!state.workoutDraft[exerciseId]) return;
+            const lastSet = state.workoutDraft[exerciseId][state.workoutDraft[exerciseId].length - 1];
+            state.workoutDraft[exerciseId].push({ weight: lastSet ? lastSet.weight : '', reps: '', done: false });
+            renderClientView(); if (window.lucide) window.lucide.createIcons();
+        };
+
+        window.removeSetFromExercise = (exerciseId, setIndex) => {
+            if (!state.workoutDraft[exerciseId] || state.workoutDraft[exerciseId].length <= 1) {
+                showToast("Debes mantener al menos una serie.");
+                return;
+            }
+            state.workoutDraft[exerciseId].splice(setIndex, 1);
+            renderClientView();
+            if (window.lucide) window.lucide.createIcons();
+        };
+
+        window.finishAndSaveWorkout = () => {
+            if (!state.activeWorkoutRoutineId || !state.selectedClientProfileId) return;
+            const routine = state.routines.find(r => r.id === state.activeWorkoutRoutineId);
+            const client = state.clients.find(c => c.id === state.selectedClientProfileId);
+            if (!routine || !client) return;
+
+            const clientNotes = document.getElementById('workout-session-notes')?.value.trim() || '';
+            const loggedExercises = (routine.exercises || []).map(ex => {
+                const sets = (state.workoutDraft[ex.id] || []).map(s => ({
+                    weight: s.weight || '0', reps: s.reps || '0', done: Boolean(s.done)
+                }));
+                return { name: ex.name, sets, gif: ex.gif || '' };
+            });
+
+            const newLog = {
+                id: 'log_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                clientId: client.id, clientName: client.name, routineId: routine.id,
+                dateKey: routine.dateKey, routineTitle: routine.title,
+                completedAt: Date.now(), clientNotes, exercises: loggedExercises
+            };
+
+            state.logs.unshift(newLog);
+            persistState();
+            state.activeWorkoutRoutineId = null;
+            state.workoutDraft = {};
+            state.clientTab = 'history';
+            renderApp();
+            showToast("¡Entrenamiento guardado en la nube!");
+        };
+
+        function filterLogsByTimeframe(logs, timeframe) {
+            const now = Date.now(); const oneDay = 86400000;
+            return logs.filter(log => {
+                const diff = now - log.completedAt;
+                if (timeframe === 'week') return diff <= oneDay * 7;
+                if (timeframe === 'month') return diff <= oneDay * 30;
+                if (timeframe === 'year') return diff <= oneDay * 365;
+                return true;
+            });
+        }
+
+        function renderApp() {
+            const viewTrainer = document.getElementById('view-trainer');
+            const viewClient = document.getElementById('view-client');
+
+            if (state.role === 'trainer' && !state.isLockedClientMode) {
+                viewTrainer.classList.remove('hidden'); viewClient.classList.add('hidden');
+                renderTrainerView();
+            } else {
+                viewTrainer.classList.add('hidden'); viewClient.classList.remove('hidden');
+                renderClientView();
+            }
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        function renderTrainerView() {
+            const clientListEl = document.getElementById('trainer-client-list');
+            if (state.clients.length === 0) {
+                clientListEl.innerHTML = `<p class="text-xs text-zinc-500 text-center py-4">Sin clientes.</p>`;
+            } else {
+                clientListEl.innerHTML = state.clients.map(client => {
+                    const isSelected = client.id === state.selectedTrainerClientId;
+                    return `
+                        <button onclick="selectTrainerClient('${client.id}')" class="w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between ${
+                            isSelected ? 'bg-white text-carbon-950 border-white shadow-md' : 'bg-carbon-950/70 border-carbon-800 text-zinc-300'
+                        }">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <div class="w-9 h-9 rounded-xl flex items-center justify-center font-brand font-extrabold text-sm shrink-0 ${isSelected ? 'bg-carbon-950 text-white' : 'bg-carbon-800 text-zinc-200'}">
+                                    ${escapeHtml(client.name.charAt(0).toUpperCase())}
+                                </div>
+                                <div class="truncate">
+                                    <div class="font-bold text-sm truncate">${escapeHtml(client.name)}</div>
+                                </div>
+                            </div>
+                        </button>
+                    `;
+                }).join('');
+            }
+
+            const noClientEl = document.getElementById('trainer-no-client');
+            const activePanelEl = document.getElementById('trainer-active-client-panel');
+            const activeClient = state.clients.find(c => c.id === state.selectedTrainerClientId);
+
+            if (!activeClient) { noClientEl.classList.remove('hidden'); activePanelEl.classList.add('hidden'); return; }
+            noClientEl.classList.add('hidden'); activePanelEl.classList.remove('hidden');
+
+            document.getElementById('active-client-name').textContent = activeClient.name;
+            document.getElementById('active-client-goal').querySelector('span').textContent = activeClient.goal || 'Sin objetivo';
+
+            const clientLogs = state.logs.filter(l => l.clientId === activeClient.id);
+            document.getElementById('logs-count-badge').textContent = clientLogs.length;
+
+            if (state.trainerTab === 'routines') {
+                document.getElementById('trainer-tab-routines-content').classList.remove('hidden');
+                document.getElementById('trainer-tab-logs-content').classList.add('hidden');
+                renderTrainerMonthlyCalendar(activeClient.id);
+            } else {
+                document.getElementById('trainer-tab-logs-content').classList.remove('hidden');
+                document.getElementById('trainer-tab-routines-content').classList.add('hidden');
+                renderTrainerLogs(filterLogsByTimeframe(clientLogs, state.trainerLogsFilter));
+            }
+        }
+
+        function renderTrainerMonthlyCalendar(clientId) {
+            const year = state.trainerYear; const month = state.trainerMonth;
+            const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            document.getElementById('trainer-calendar-title').textContent = `${monthNames[month]} ${year}`;
+
+            const grid = document.getElementById('trainer-calendar-grid');
+            const clientRoutines = state.routines.filter(r => r.clientId === clientId);
+            const dayHeaders = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
+            let html = dayHeaders.map(d => `<div class="text-center text-[10px] font-brand font-bold text-zinc-500 py-1">${d}</div>`).join('');
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const adjustedFirstDay = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
+            const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < adjustedFirstDay; i++) { html += `<div></div>`; }
+
+            for (let day = 1; day <= totalDaysInMonth; day++) {
+                const dateObj = new Date(year, month, day);
+                const dateKey = formatDateKey(dateObj);
+                const routine = clientRoutines.find(r => r.dateKey === dateKey);
+                const isSelected = state.selectedTrainerDateKey === dateKey;
+                const isToday = dateKey === todayDateKey;
+
+                html += `
+                    <button onclick="selectTrainerDate('${dateKey}')" class="p-2 rounded-xl border flex flex-col items-center justify-between min-h-[55px] transition-all ${
+                        isSelected ? 'bg-white text-carbon-950 border-white shadow-md font-extrabold' : (isToday ? 'bg-carbon-850 border-white/40 text-white' : 'bg-carbon-950 border-carbon-800 text-zinc-300')
+                    }">
+                        <span class="text-xs font-bold">${day}</span>
+                        <span class="w-2 h-2 rounded-full ${routine ? (isSelected ? 'bg-carbon-950' : 'bg-white') : 'bg-transparent'}"></span>
+                    </button>
+                `;
+            }
+            grid.innerHTML = html;
+
+            const editorContainer = document.getElementById('trainer-selected-day-editor');
+            const selectedRoutine = clientRoutines.find(r => r.dateKey === state.selectedTrainerDateKey);
+            const formattedSelectedDate = new Date(state.selectedTrainerDateKey + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+            if (!selectedRoutine) {
+                editorContainer.innerHTML = `
+                    <div class="bg-carbon-900 border border-carbon-800 rounded-2xl p-5 space-y-4">
+                        <div class="flex items-center justify-between border-b border-carbon-800 pb-3">
+                            <span class="text-[10px] font-brand uppercase tracking-[0.2em] text-zinc-500">${formattedSelectedDate}</span>
+                            <span class="text-xs text-zinc-400 font-medium">Descanso</span>
+                        </div>
+                        <form onsubmit="handleSaveDateRoutine(event, '${state.selectedTrainerDateKey}')" class="space-y-3">
+                            <input type="text" id="date-routine-title" required placeholder="Nombre de sesión (Ej. Torso A)" class="w-full bg-carbon-950 border border-carbon-700 rounded-xl px-3 py-2.5 text-sm text-white">
+                            <input type="text" id="date-routine-desc" placeholder="Notas opcionales" class="w-full bg-carbon-950 border border-carbon-700 rounded-xl px-3 py-2.5 text-sm text-white">
+                            <button type="submit" class="px-5 py-2.5 rounded-xl bg-white text-carbon-950 font-bold text-xs uppercase">Programar Rutina</button>
+                        </form>
+                    </div>
+                `;
+                return;
+            }
+
+            editorContainer.innerHTML = `
+                <div class="bg-carbon-900 border border-carbon-800 rounded-2xl overflow-hidden">
+                    <div class="p-4 bg-carbon-950/60 border-b border-carbon-800 flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] uppercase text-zinc-400">${formattedSelectedDate}</span>
+                            <h3 class="text-lg font-extrabold text-white">${escapeHtml(selectedRoutine.title)}</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="toggleExerciseLibraryModal(true, '${selectedRoutine.id}')" class="px-3.5 py-2 rounded-xl bg-white text-carbon-950 text-xs font-bold">+ Biblioteca</button>
+                            <button onclick="clearDateRoutine('${selectedRoutine.id}')" class="px-3 py-2 rounded-xl bg-carbon-800 text-zinc-400 text-xs">Descanso</button>
+                        </div>
+                    </div>
+                    <div class="divide-y divide-carbon-800">
+                        ${(selectedRoutine.exercises || []).map((ex, idx) => `
+                            <div class="p-4 flex items-center justify-between gap-4">
+                                <div class="min-w-0">
+                                    <div class="font-bold text-sm text-white">${idx + 1}. ${escapeHtml(ex.name)}</div>
+                                    ${ex.gif ? `<div class="mt-1"><video src="${ex.gif}" autoplay loop muted class="w-24 h-16 rounded object-cover border border-carbon-700"></video></div>` : ''}
+                                </div>
+                                <button onclick="removeExerciseFromRoutine('${selectedRoutine.id}', '${ex.id}')" class="text-zinc-500 hover:text-red-400"><i data-lucide="x" class="w-4 h-4"></i></button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTrainerLogs(logs) {
+            document.getElementById('trainer-logs-list').innerHTML = logs.length === 0 ? `<p class="text-xs text-zinc-500 text-center py-6">Sin registros.</p>` : logs.map(l => renderLogCard(l)).join('');
+        }
+
+        function renderClientView() {
+            const previewBanner = document.getElementById('client-preview-banner');
+            const selector = document.getElementById('client-profile-selector');
+
+            if (state.isLockedClientMode) { previewBanner.classList.add('hidden'); }
+            else {
+                previewBanner.classList.remove('hidden');
+                selector.innerHTML = state.clients.map(c => `<option value="${c.id}" ${c.id === state.selectedClientProfileId ? 'selected' : ''}>${escapeHtml(c.name)}</option>`).join('');
+            }
+
+            const activeClient = state.clients.find(c => c.id === state.selectedClientProfileId);
+            if (!activeClient) return;
+
+            document.getElementById('client-avatar-initial').textContent = activeClient.name.charAt(0).toUpperCase();
+            document.getElementById('client-welcome-name').textContent = activeClient.name;
+            document.getElementById('client-view-goal').textContent = activeClient.goal || 'Planificación';
+
+            if (state.clientTab === 'workout') {
+                document.getElementById('client-tab-workout-content').classList.remove('hidden');
+                document.getElementById('client-tab-history-content').classList.add('hidden');
+                renderClientMonthlyCalendar(activeClient);
+            } else {
+                document.getElementById('client-tab-history-content').classList.remove('hidden');
+                document.getElementById('client-tab-workout-content').classList.add('hidden');
+                renderClientHistorySection(activeClient);
+            }
+        }
+
+        function renderClientMonthlyCalendar(client) {
+            const year = state.clientYear; const month = state.clientMonth;
+            const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            document.getElementById('client-calendar-title').textContent = `${monthNames[month]} ${year}`;
+
+            const grid = document.getElementById('client-calendar-grid');
+            const container = document.getElementById('client-day-workout-container');
+            const clientRoutines = state.routines.filter(r => r.clientId === client.id);
+
+            const dayHeaders = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
+            let html = dayHeaders.map(d => `<div class="text-center text-[10px] font-brand font-bold text-zinc-500 py-1">${d}</div>`).join('');
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const adjustedFirstDay = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
+            const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < adjustedFirstDay; i++) { html += `<div></div>`; }
+
+            for (let day = 1; day <= totalDaysInMonth; day++) {
+                const dateObj = new Date(year, month, day);
+                const dateKey = formatDateKey(dateObj);
+                const routine = clientRoutines.find(r => r.dateKey === dateKey);
+                const isSelected = state.selectedClientDateKey === dateKey;
+                const isToday = dateKey === todayDateKey;
+
+                html += `
+                    <button onclick="selectClientDate('${dateKey}')" class="p-2 rounded-xl border flex flex-col items-center justify-between min-h-[55px] transition-all ${
+                        isSelected ? 'bg-white text-carbon-950 border-white shadow-md font-extrabold' : (isToday ? 'bg-carbon-850 border-white/40 text-white' : 'bg-carbon-950 border-carbon-800 text-zinc-300')
+                    }">
+                        <span class="text-xs font-bold">${day}</span>
+                        <span class="w-2 h-2 rounded-full ${routine ? (isSelected ? 'bg-carbon-950' : 'bg-white') : 'bg-transparent'}"></span>
+                    </button>
+                `;
+            }
+            grid.innerHTML = html;
+
+            if (state.activeWorkoutRoutineId) {
+                const routine = clientRoutines.find(r => r.id === state.activeWorkoutRoutineId);
+                if (!routine) { state.activeWorkoutRoutineId = null; renderClientMonthlyCalendar(client); return; }
+
+                container.innerHTML = `
+                    <div class="bg-carbon-900 border border-white/30 rounded-2xl p-4 sm:p-5 space-y-5">
+                        <div class="flex items-center justify-between border-b border-carbon-800 pb-4">
+                            <h2 class="text-xl font-extrabold text-white">${escapeHtml(routine.title)}</h2>
+                            <button onclick="cancelWorkoutSession()" class="px-3 py-1.5 rounded-xl bg-carbon-800 text-zinc-300 text-xs">Cancelar</button>
+                        </div>
+                        <div class="space-y-5">
+                            ${(routine.exercises || []).map((ex, exIdx) => `
+                                <div class="bg-carbon-950 border border-carbon-800 rounded-2xl p-4 space-y-3">
+                                    <div class="font-bold text-base text-white">${exIdx + 1}. ${escapeHtml(ex.name)}</div>
+                                    ${ex.gif ? `<div><video src="${ex.gif}" autoplay loop muted class="w-full h-40 rounded-xl object-cover border border-carbon-700"></video></div>` : ''}
+                                    <div class="space-y-2">
+                                        ${(state.workoutDraft[ex.id] || []).map((s, sIdx) => `
+                                            <div class="grid grid-cols-12 gap-1.5 items-center p-1.5 rounded-xl bg-carbon-900 border border-carbon-800">
+                                                <div class="col-span-2 text-center font-bold text-xs sm:text-sm text-zinc-400">S${sIdx + 1}</div>
+                                                <div class="col-span-4"><input type="text" inputmode="decimal" value="${escapeHtml(s.weight)}" oninput="updateSetDraft('${ex.id}', ${sIdx}, 'weight', this.value)" placeholder="kg" class="w-full text-center font-bold text-xs sm:text-sm bg-carbon-950 border border-carbon-700 rounded-lg py-2 text-white"></div>
+                                                <div class="col-span-3"><input type="text" inputmode="numeric" value="${escapeHtml(s.reps)}" oninput="updateSetDraft('${ex.id}', ${sIdx}, 'reps', this.value)" placeholder="reps" class="w-full text-center font-bold text-xs sm:text-sm bg-carbon-950 border border-carbon-700 rounded-lg py-2 text-white"></div>
+                                                <div class="col-span-2 flex justify-center"><button type="button" onclick="updateSetDraft('${ex.id}', ${sIdx}, 'done', ${!s.done})" class="w-8 h-8 rounded-xl flex items-center justify-center ${s.done ? 'bg-white text-carbon-950' : 'bg-carbon-800 text-zinc-500'}"><i data-lucide="check" class="w-4 h-4"></i></button></div>
+                                                <div class="col-span-1 flex justify-center"><button type="button" onclick="removeSetFromExercise('${ex.id}', ${sIdx})" class="text-zinc-500 hover:text-red-400 p-1" title="Quitar serie"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                    <button type="button" onclick="addExtraSetToExercise('${ex.id}')" class="w-full py-1.5 rounded border border-dashed border-carbon-700 text-xs text-zinc-300 font-semibold hover:bg-carbon-900">+ Serie extra</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button onclick="finishAndSaveWorkout()" class="w-full py-4 bg-white text-carbon-950 font-extrabold text-xs uppercase rounded-xl shadow">Guardar en la Nube</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const selectedRoutine = clientRoutines.find(r => r.dateKey === state.selectedClientDateKey);
+            const formattedDate = new Date(state.selectedClientDateKey + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+
+            if (!selectedRoutine) {
+                container.innerHTML = `<div class="bg-carbon-900 border border-carbon-800 rounded-2xl p-8 text-center"><h3 class="font-bold text-white">${formattedDate} — Descanso</h3></div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="bg-carbon-900 border border-carbon-800 rounded-2xl p-5 space-y-4">
+                    <h3 class="text-xl font-extrabold text-white">${escapeHtml(selectedRoutine.title)}</h3>
+                    <div class="space-y-2 bg-carbon-950 rounded-xl p-3.5 border border-carbon-800">
+                        ${(selectedRoutine.exercises || []).map((ex, idx) => `
+                            <div class="flex items-center justify-between text-xs py-1.5">
+                                <span class="text-zinc-200 font-semibold">${idx + 1}. ${escapeHtml(ex.name)}</span>
+                                <span class="text-zinc-400 font-bold">${ex.sets} × ${escapeHtml(ex.targetReps)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button onclick="startWorkoutSession('${selectedRoutine.id}')" class="w-full py-3.5 rounded-xl font-extrabold text-xs uppercase bg-white text-carbon-950 shadow">Comenzar Entrenamiento</button>
+                </div>
+            `;
+        }
+
+        function renderClientHistorySection(client) {
+            const myLogs = state.logs.filter(l => l.clientId === client.id);
+            document.getElementById('client-history-container').innerHTML = myLogs.length === 0 ? `<div class="bg-carbon-900 border border-carbon-800 rounded-2xl p-8 text-center text-zinc-400 text-sm">Sin entrenamientos registrados.</div>` : myLogs.map(l => renderLogCard(l)).join('');
+        }
+
+        function renderLogCard(log) {
+            return `
+                <div class="bg-carbon-900 border border-carbon-800 rounded-2xl p-4 sm:p-5 space-y-3">
+                    <div class="flex items-center justify-between border-b border-carbon-800 pb-3">
+                        <h4 class="font-bold text-base text-white">${escapeHtml(log.routineTitle)}</h4>
+                        <span class="text-xs text-zinc-500">${formatDate(log.completedAt)}</span>
+                    </div>
+                    <div class="space-y-2.5">
+                        ${(log.exercises || []).map(ex => `
+                            <div class="bg-carbon-950 rounded-xl p-3 border border-carbon-800">
+                                <div class="font-bold text-sm text-zinc-200 mb-2">${escapeHtml(ex.name)}</div>
+                                ${ex.gif ? `<div><video src="${ex.gif}" autoplay loop muted class="w-20 h-14 rounded object-cover mb-2"></video></div>` : ''}
+                                <div class="flex flex-wrap gap-2">
+                                    ${(ex.sets || []).map((s, i) => `
+                                        <div class="px-2 py-1 rounded bg-carbon-900 text-xs border border-carbon-800 text-white font-medium">S${i + 1}: <strong>${s.weight}kg</strong> × ${s.reps}</div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function copyTextToClipboard(text) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try { document.execCommand('copy'); } catch (err) {}
+            document.body.removeChild(tempInput);
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `pointer-events-auto px-4 py-3 rounded-xl shadow-2xl border text-xs sm:text-sm font-semibold bg-white border-zinc-200 text-carbon-950`;
+            toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
+        }
+
+        function openConfirmModal(title, message, onConfirm) {
+            const modal = document.getElementById('custom-modal');
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').textContent = message;
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            document.getElementById('modal-cancel').onclick = () => { modal.classList.add('hidden'); modal.classList.remove('flex'); };
+            document.getElementById('modal-confirm').onclick = () => { modal.classList.add('hidden'); modal.classList.remove('flex'); onConfirm(); };
+        }
+
+        function formatDate(timestamp) {
+            if (!timestamp) return '';
+            return new Date(timestamp).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => { renderApp(); });
+    </script>
+</body>
+</html>
